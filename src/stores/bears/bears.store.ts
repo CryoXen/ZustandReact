@@ -1,4 +1,5 @@
 import {create} from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface Bear {
     id: number;
@@ -26,7 +27,9 @@ interface BearState{
     clearBears: () => void;
 }
 
-export const useBearStore = create<BearState>()((set, get) => ({
+export const useBearStore = create<BearState>()(
+    persist(
+    (set, get) => ({
     blackBears: 10,
     polarBears: 2,
     pandaBears: 7,
@@ -47,4 +50,8 @@ export const useBearStore = create<BearState>()((set, get) => ({
     addBear: () => set(state =>({
         bears: [...state.bears, {id: state.bears.length + 1, name: `Otro oso ${state.bears.length + 1}`}]})),
     clearBears: () => set({bears: []}),
-}));
+})
+,{
+    name: 'bear-storage'
+})
+);
